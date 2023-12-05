@@ -68,7 +68,7 @@ namespace Invoice.Repositories
             }
             else
             {
-                if(record.TokenExpiry > DateTime.Now)
+                if(record.TokenExpiry < DateTime.Now)
                 {
                     record.Token = Guid.NewGuid();
                     record.TokenExpiry = DateTime.Now.AddMinutes(1);

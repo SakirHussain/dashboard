@@ -60,6 +60,12 @@ namespace Invoice.Controllers
                 response.status = StatusCodes.Status200OK;
                 response.data =  _interDbOp.TokenCheck(request.LoginId).ToString();
             }
+            else
+            {
+                response.error.errorCode = StatusCodes.Status401Unauthorized;
+                response.error.errorMessage = "Invalid Login Details";
+                response.error.TimeStamp = DateTime.Now;
+            }
 
 
             return response;
