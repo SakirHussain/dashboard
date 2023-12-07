@@ -19,31 +19,22 @@ namespace Invoice.Repositories
 
         public bool clientVerification(AuthRequestHeaders request)
         {
-           (string,string, string) clientDetails =  _interDbOp.ClientIdentityFetch(request);
- 
+            Dictionary<string, string> clientDetails = _interDbOp.ClientIdentityFetch(request);
 
-            if (request.ClientId != null && request.ClientSecret != null)
+
+            if (request.ClientId != null && request.ClientSecret != null && request.LoginId != null && request.AuthToken != null)
             {
-                if (request.ClientId == clientDetails.Item1)
-                {
-                    if (request.ClientSecret == clientDetails.Item2)
+                if (request.ClientId == clientDetails["client_id"] && request.ClientSecret == clientDetails["client_secret"])
+                {              
+                    if (DateTime.Parse(clientDetails["expiry"]) > DateTime.Now) 
                     {
-                        return (String.Equals(request.AuthToken, clientDetails.Item3, StringComparison.OrdinalIgnoreCase));
+                        return (String.Equals(request.AuthToken, clientDetails["token"], StringComparison.OrdinalIgnoreCase));
                     }
-                    else
-                    {
-                        return false;
-                    }
+                    else { return false; }      
                 }
-                else
-                {
-                    return false;
-                }
+                else { return false; }
             }
-            else
-            {
-                return false;
-            }
+            else { return false; }
         }
     }
 }

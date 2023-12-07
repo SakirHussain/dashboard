@@ -32,19 +32,26 @@ namespace Invoice.Repositories
             
         }
 
-        public (string,string, string) ClientIdentityFetch(AuthRequestHeaders request)
+        public Dictionary<string, string> ClientIdentityFetch(AuthRequestHeaders request)
         {
-           var clientRecord =  _db.ClientIdentity.FirstOrDefault(u => u.client_id == request.ClientId);
+            var clientRecord =  _db.ClientIdentity.FirstOrDefault(u => u.client_id == request.ClientId);
             var loginRecord = _db.LoginDetails.FirstOrDefault(u => u.LoginId == request.LoginId);
 
 
             if (clientRecord != null && loginRecord != null)
             {
-                return (clientRecord.client_id, clientRecord.client_secret, loginRecord.Token.ToString());
+                Dictionary<string, string> returnValues = new Dictionary<string, string>();
+
+                returnValues["client_id"] = clientRecord.client_id;
+                returnValues["client_secret"] = clientRecord.client_secret;
+                returnValues["token"] = loginRecord.Token.ToString();
+                returnValues["expiry"] = loginRecord.TokenExpiry.ToString();
+
+                return returnValues;
             }
             else
             {
-                return (null, null, null);
+                return null;
             }
 
         }

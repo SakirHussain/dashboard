@@ -5,7 +5,7 @@ namespace Invoice.Interfaces
 {
     public interface HeaderVerificationInterface
     {
-        public bool clientVerification(AuthRequestHeaders request);
+        public bool clientVerification(AuthRequestHeaders requestHeaders);
 
     }
 }
