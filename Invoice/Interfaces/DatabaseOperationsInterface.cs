@@ -1,12 +1,13 @@
-﻿using System.Text;
+﻿using Invoice.Web_Models;
+using System.Text;
 
 namespace Invoice.Interfaces
 {
     public interface DatabaseOperationsInterface
     {
-        string topNStates(int n);
-        (string, string) ClientIdentityFetch(string client_id);
+        string topNStates(string n);
+        (string, string, string) ClientIdentityFetch(AuthRequestHeaders request);
         (string, string) LoginDetailsFetch(string loginId);
-        Guid TokenCheck(string loginId);
+        AuthResponseModel TokenCheck(string loginId);
     }
 }

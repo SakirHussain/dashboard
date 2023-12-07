@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
+﻿using Invoice.Web_Models;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace Invoice.Interfaces
 {
     public interface HeaderVerificationInterface
     {
-        public object clientVerification(string client_id, string client_secret);
+        public bool clientVerification(AuthRequestHeaders request);
 
     }
 }

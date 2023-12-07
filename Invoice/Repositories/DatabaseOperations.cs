@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Protocols;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json;
+using Invoice.Web_Models;
 
 namespace Invoice.Repositories
 {
@@ -20,28 +21,30 @@ namespace Invoice.Repositories
             _db = db;
         }    
 
-        public string topNStates(int n)
+        public string topNStates(string n)
         { 
             var nStates = _db.GrossNetProduceStates
                                 .OrderByDescending(s => s.grossIncome)
-                                .Take(n).Select(s => s.state)
+                                .Take(int.Parse(n)).Select(s => s.state)
                                 .ToList();
 
             return JsonSerializer.Serialize(nStates);
             
         }
 
-        public (string,string) ClientIdentityFetch(string client_id)
+        public (string,string, string) ClientIdentityFetch(AuthRequestHeaders request)
         {
-           var record =  _db.ClientIdentity.FirstOrDefault(u => u.client_id == client_id);
+           var clientRecord =  _db.ClientIdentity.FirstOrDefault(u => u.client_id == request.ClientId);
+            var loginRecord = _db.LoginDetails.FirstOrDefault(u => u.LoginId == request.LoginId);
 
-            if (record != null)
+
+            if (clientRecord != null && loginRecord != null)
             {
-                return (record.client_id, record.client_secret);
+                return (clientRecord.client_id, clientRecord.client_secret, loginRecord.Token.ToString());
             }
             else
             {
-                return (null, null);
+                return (null, null, null);
             }
 
         }
@@ -56,29 +59,37 @@ namespace Invoice.Repositories
             else { return (null, null); }
         }
 
-        public Guid TokenCheck(string loginId)
+        public AuthResponseModel TokenCheck(string loginId)
         {
+            AuthResponseModel authResponse = new AuthResponseModel();
+
             var record = _db.LoginDetails.FirstOrDefault(u => u.LoginId == loginId);
+
+            if (record == null) { return null; }
 
             if (record.Token == null)
             {
                 record.Token = Guid.NewGuid();
                 //record.TokenExpiry = DateTime.Now.AddHours(1);
-                record.TokenExpiry = DateTime.Now.AddMinutes(1);              
+                record.TokenExpiry = DateTime.Now.AddMinutes(3);              
             }
             else
             {
-                if(record.TokenExpiry < DateTime.Now)
+                if(record.TokenExpiry <= DateTime.Now)
                 {
                     record.Token = Guid.NewGuid();
-                    record.TokenExpiry = DateTime.Now.AddMinutes(1);
+                    record.TokenExpiry = DateTime.Now.AddMinutes(3);
                 }
             }
 
             _db.SaveChanges();
 
-            return (Guid)record.Token;
+            authResponse.AuthToken = (Guid)record.Token;
+            authResponse.TokenTime = record.TokenExpiry.ToString();
+
+            return authResponse;
         }
+
 
         
     }

@@ -1,6 +1,7 @@
 ﻿using Invoice.Data;
 using Invoice.Interfaces;
 using Invoice.RecordModels;
+using Invoice.Web_Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,16 +17,23 @@ namespace Invoice.Repositories
             _interDbOp = interDbOp;
         }
 
-        public object clientVerification(string client_id , string client_secret)
+        public bool clientVerification(AuthRequestHeaders request)
         {
-           (string,string) clientDetails =  _interDbOp.ClientIdentityFetch(client_id);
+           (string,string, string) clientDetails =  _interDbOp.ClientIdentityFetch(request);
  
 
-            if (client_id != null && client_secret != null)
+            if (request.ClientId != null && request.ClientSecret != null)
             {
-                if (client_id == clientDetails.Item1)
+                if (request.ClientId == clientDetails.Item1)
                 {
-                    return (client_secret == clientDetails.Item2);
+                    if (request.ClientSecret == clientDetails.Item2)
+                    {
+                        return (String.Equals(request.AuthToken, clientDetails.Item3, StringComparison.OrdinalIgnoreCase));
+                    }
+                    else
+                    {
+                        return false;
+                    }
                 }
                 else
                 {
@@ -34,7 +42,7 @@ namespace Invoice.Repositories
             }
             else
             {
-                return null;
+                return false;
             }
         }
     }

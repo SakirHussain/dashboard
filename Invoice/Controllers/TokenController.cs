@@ -4,10 +4,11 @@ using Invoice.Web_Models;
 using Invoice.WebModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Invoice.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class TokenController : ControllerBase
     {
@@ -25,44 +26,49 @@ namespace Invoice.Controllers
         public ApiResponseModel GetToken(TokenRequestModel request)
         {
             ApiResponseModel response = new ApiResponseModel();
+            
+            AuthRequestHeaders requestHeaders = new AuthRequestHeaders();
 
-            Request.Headers.TryGetValue("client-id", out var client_id);
-            Request.Headers.TryGetValue("client-secret", out var client_secret);
 
-            object test = _interHeaderVer.clientVerification(client_id, client_secret);
+            HttpContext.Request.Headers.TryGetValue("client-id", out var client_id);
+            HttpContext.Request.Headers.TryGetValue("client-secret", out var client_secret);
+            HttpContext.Request.Headers.TryGetValue("token", out var token);
 
-            if (test != null) /**/
+            requestHeaders.ClientId = client_id;
+            requestHeaders.ClientSecret = client_secret;
+            requestHeaders.AuthToken = token;
+
+            bool test = _interHeaderVer.clientVerification(requestHeaders);
+
+            if (test == true)
             {
-                if ((bool)test == true) /**/
-                {
-                    response.status = StatusCodes.Status200OK;
-                }
-                else
-                {
-                    response.error.errorCode = StatusCodes.Status401Unauthorized;
-                    response.error.errorMessage = "Invalid Client Values";
-
-                    return response;
-                }
+                response.status = 1; // success
             }
             else
             {
-                response.error.errorCode = StatusCodes.Status400BadRequest;
-                response.error.errorMessage = "Incomplete Header in Request";
+                response.status = 0;
+                response.data = null;
+                response.error.errorCode = StatusCodes.Status401Unauthorized;
+                response.error.errorMessage = "Invalid Client Values";
 
                 return response;
             }
+           
 
             (string, string) loginAuth = _interDbOp.LoginDetailsFetch(request.LoginId);
             
             if(loginAuth.Item1 == request.Password && loginAuth.Item2 == request.PhoneNumber)
             {
-                response.status = StatusCodes.Status200OK;
-                response.data =  _interDbOp.TokenCheck(request.LoginId).ToString();
+                AuthResponseModel authRes = _interDbOp.TokenCheck(request.LoginId);
+                
+                response.error = null;        
+                response.data =  JsonSerializer.Serialize(authRes);
             }
             else
             {
-                response.error.errorCode = StatusCodes.Status401Unauthorized;
+                response.status = 0; // error
+                response.data = null;
+                response.error.errorCode = 104;
                 response.error.errorMessage = "Invalid Login Details";
                 response.error.TimeStamp = DateTime.Now;
             }

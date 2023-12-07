@@ -1,11 +1,7 @@
 ﻿using Invoice.WebModels;
-using Invoice.Data;
-using Invoice.Repositories;
 using Invoice.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using Invoice.Web_Models;
 
 namespace Invoice.Controllers
 {
@@ -23,42 +19,49 @@ namespace Invoice.Controllers
             _interHeaderVer = interHeaderVer;
         }
 
-        [HttpPost("{num:int}")]
-        /*[Route("TopStates")]*/
-       public ApiResponseModel GetTopStates(int num)
-        {          
+        [HttpPost]
+       public ApiResponseModel GetTopStates(RequestModel request)
+        {   
+            
+          //  System.Net.Http.Headers.HttpRequestHeaders header = Request.Headers;
+
             ApiResponseModel response = new ApiResponseModel();
 
-            Request.Headers.TryGetValue("client-id", out var client_id);
-            Request.Headers.TryGetValue("client-secret", out var client_secret);
- 
-            object test =  _interHeaderVer.clientVerification(client_id, client_secret);
+            AuthRequestHeaders requestHeaders = new AuthRequestHeaders();                
             
-            if (test != null) /**/
+
+            HttpContext.Request.Headers.TryGetValue("client-id", out var client_id);
+            HttpContext.Request.Headers.TryGetValue("client-secret", out var client_secret);
+            HttpContext.Request.Headers.TryGetValue("login-id", out var login_id);
+            HttpContext.Request.Headers.TryGetValue("token", out var token);
+
+            requestHeaders.ClientId = client_id;
+            requestHeaders.ClientSecret = client_secret;
+            requestHeaders.LoginId = login_id;
+            requestHeaders.AuthToken = token;
+ 
+            bool test =  _interHeaderVer.clientVerification(requestHeaders);
+            
+            if (test == true) 
             {
-                if ((bool)test == true) /**/
-                {
-                    response.status = StatusCodes.Status200OK;                
-                }
-                else
-                {
-                    response.error.errorCode = StatusCodes.Status401Unauthorized;
-                    response.error.errorMessage = "Invalid Client Values";
-
-                    return response;
-                }
-
+                response.status = 1;                
             }
             else
             {
-                response.error.errorCode = StatusCodes.Status400BadRequest;
-                response.error.errorMessage = "Incomplete Header in Request";
+                response.status = 0;
+                response.data = null;
+                response.error.errorCode = StatusCodes.Status401Unauthorized;
+                response.error.errorMessage = "Invalid Client Values";
 
                 return response;
             }
+         
+
+            // verify token
 
 
-            response.data = _interDbOp.topNStates(num);
+
+            response.data = _interDbOp.topNStates(request.Data);
 
 
             return response;
