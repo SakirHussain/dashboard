@@ -28,7 +28,7 @@ namespace Invoice.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Entry(string s) // action & data ;; data must be serialized json
+        public async Task<IActionResult> Entry(RequestModel request) // action & data ;; data must be serialized json
         {
             ApiResponseModel response = new ApiResponseModel();
 
@@ -44,43 +44,28 @@ namespace Invoice.Controllers
             TokenRequestModel obj = new TokenRequestModel();
             if (true)
             {
-                if (true)
+                if (request.Action == "Get Token")
                 {
-                    /*var client = new HttpClient();*/
-                    /*httpClient.BaseAddress = new Uri("https://localhost:7272");
-                    var targetUrl = Url.Action("GetToken", "Token");
-                    var req = new HttpRequestMessage(HttpMethod.Get, targetUrl)
-                    {
-                        Content = new StringContent($"{{\"s\": \"{s}\"}}", Encoding.UTF8, "application/json")                        
-                    };
-                    var res = await _httpClient.PostAsync("https://localhost:7272/api/Token",
-                        new StringContent($"{{\"s\": \"{s}\"}}", Encoding.UTF8, "application/json")
-                        );*/
-
-                        return RedirectToAction("GetToken", "Token", new { request = "passed"});
-
+                    return RedirectToAction("GetToken", "Token", new { request = request.Data });
                 }
-                /*else if (request.Action == "Top States")
+                else if (request.Action == "Top States")
                 {
                     return RedirectToAction("Invoice", "GetTopStates");
                 }
             }
             else
             {
-                *//*response.status = 0;
+                response.status = 0;
                 response.error.errorCode = StatusCodes.Status401Unauthorized;
                 response.error.errorMessage = "Unauthorized Access, Check header values";
-                response.data = null;*//*
+                response.data = null;
 
                 return Ok(response);
-            }*/
-
-                return Ok(response);
-
             }
 
-
-
-        }
+            return Ok(response);
+        } 
     }
+        
 }
+
