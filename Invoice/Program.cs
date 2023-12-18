@@ -11,6 +11,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnect"));
 }
 );
+builder.Services.AddHttpClient();
 
 builder.Services.AddScoped(typeof(DatabaseOperationsInterface), typeof(DatabaseOperations));
 builder.Services.AddScoped(typeof(HeaderVerificationInterface), typeof(HeaderVerification));
@@ -30,6 +31,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+/*
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+}
+);*/
 
 app.UseHttpsRedirection();
 

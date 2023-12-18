@@ -22,39 +22,14 @@ namespace Invoice.Controllers
 
         }
 
-        [HttpGet]
-        public ApiResponseModel GetToken(TokenRequestModel request)
+        [HttpGet, HttpPost]
+        public ApiResponseModel GetToken(string s)
         {
             ApiResponseModel response = new ApiResponseModel();
             
-            AuthRequestHeaders requestHeaders = new AuthRequestHeaders();
-
-
-            HttpContext.Request.Headers.TryGetValue("client-id", out var client_id);
-            HttpContext.Request.Headers.TryGetValue("client-secret", out var client_secret);
-            HttpContext.Request.Headers.TryGetValue("token", out var token);
-
-            requestHeaders.ClientId = client_id;
-            requestHeaders.ClientSecret = client_secret;
-            requestHeaders.AuthToken = token;
-
-            bool test = _interHeaderVer.clientVerification(requestHeaders);
-
-            if (test == true)
-            {
-                response.status = 1; // success
-            }
-            else
-            {
-                response.status = 0;
-                response.data = null;
-                response.error.errorCode = StatusCodes.Status401Unauthorized;
-                response.error.errorMessage = "Invalid Client Values";
-
-                return response;
-            }
+            AuthRequestHeaders requestHeaders = new AuthRequestHeaders();       
            
-
+/*
             (string, string) loginAuth = _interDbOp.LoginDetailsFetch(request.LoginId);
             
             if(loginAuth.Item1 == request.Password && loginAuth.Item2 == request.PhoneNumber)
@@ -71,7 +46,7 @@ namespace Invoice.Controllers
                 response.error.errorCode = 104;
                 response.error.errorMessage = "Invalid Login Details";
                 response.error.TimeStamp = DateTime.Now;
-            }
+            }*/
 
 
             return response;
