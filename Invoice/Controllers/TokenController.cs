@@ -23,7 +23,7 @@ namespace Invoice.Controllers
         }
 
         [HttpGet, HttpPost]
-        public ApiResponseModel GetToken(string s)
+        public ApiResponseModel GetToken(string request)
         {
             ApiResponseModel response = new ApiResponseModel();
             
