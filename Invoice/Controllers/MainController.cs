@@ -47,14 +47,17 @@ namespace Invoice.Controllers
                 if (true)
                 {
                     /*var client = new HttpClient();*/
-                    _httpClient.BaseAddress = new Uri("https://localhost:7272");
+                    /*httpClient.BaseAddress = new Uri("https://localhost:7272");
                     var targetUrl = Url.Action("GetToken", "Token");
                     var req = new HttpRequestMessage(HttpMethod.Get, targetUrl)
                     {
                         Content = new StringContent($"{{\"s\": \"{s}\"}}", Encoding.UTF8, "application/json")                        
                     };
-                    var res = await _httpClient.GetAsync("https://localhost:7272/api/Token?s=s");
+                    var res = await _httpClient.PostAsync("https://localhost:7272/api/Token",
+                        new StringContent($"{{\"s\": \"{s}\"}}", Encoding.UTF8, "application/json")
+                        );*/
 
+                        return RedirectToAction("GetToken", "Token", new { request = "passed"});
 
                 }
                 /*else if (request.Action == "Top States")
