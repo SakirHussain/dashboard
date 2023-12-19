@@ -4,6 +4,7 @@ using Invoice.RecordModels;
 using Invoice.Web_Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Invoice.Repositories
 {
@@ -21,6 +22,10 @@ namespace Invoice.Repositories
         {
             Dictionary<string, string> clientDetails = _interDbOp.ClientIdentityFetch(request);
 
+            if (clientDetails["token"].IsNullOrEmpty())
+            {
+                return false;
+            }
 
             if (request.ClientId != null && request.ClientSecret != null && request.LoginId != null && request.AuthToken != null)
             {

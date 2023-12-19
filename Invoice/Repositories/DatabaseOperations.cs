@@ -56,14 +56,14 @@ namespace Invoice.Repositories
 
         }
 
-        public (string, string) LoginDetailsFetch(string loginId)
+        public bool LoginDetailsVerify(TokenRequestModel req)
         {
-            var record = _db.LoginDetails.FirstOrDefault(u => u.LoginId == loginId);
-            if (record != null)
+            var record = _db.LoginDetails.FirstOrDefault(u => u.LoginId == req.LoginId);
+            if (record.Password == req.Password && record.PhoneNumber == req.PhoneNumber)
             {
-                return (record.Password, record.PhoneNumber);
+                return true;
             }
-            else { return (null, null); }
+            else { return false; }
         }
 
         public AuthResponseModel TokenCheck(string loginId)
@@ -77,8 +77,8 @@ namespace Invoice.Repositories
             if (record.Token == null)
             {
                 record.Token = Guid.NewGuid();
-                //record.TokenExpiry = DateTime.Now.AddHours(1);
-                record.TokenExpiry = DateTime.Now.AddMinutes(3);              
+                record.TokenExpiry = DateTime.Now.AddHours(1);
+                //record.TokenExpiry = DateTime.Now.AddMinutes(3);              
             }
             else
             {

@@ -27,14 +27,15 @@ namespace Invoice.Controllers
         {
             ApiResponseModel response = new ApiResponseModel();
             
-            AuthRequestHeaders requestHeaders = new AuthRequestHeaders();       
-           
-/*
-            (string, string) loginAuth = _interDbOp.LoginDetailsFetch(request.LoginId);
+            AuthRequestHeaders requestHeaders = new AuthRequestHeaders();
             
-            if(loginAuth.Item1 == request.Password && loginAuth.Item2 == request.PhoneNumber)
+            TokenRequestModel requestModel = JsonSerializer.Deserialize<TokenRequestModel>(request);
+                                  
+
+                       
+            if(_interDbOp.LoginDetailsVerify(requestModel))
             {
-                AuthResponseModel authRes = _interDbOp.TokenCheck(request.LoginId);
+                AuthResponseModel authRes = _interDbOp.TokenCheck(requestModel.LoginId);
                 
                 response.error = null;        
                 response.data =  JsonSerializer.Serialize(authRes);
@@ -46,7 +47,7 @@ namespace Invoice.Controllers
                 response.error.errorCode = 104;
                 response.error.errorMessage = "Invalid Login Details";
                 response.error.TimeStamp = DateTime.Now;
-            }*/
+            }
 
 
             return response;

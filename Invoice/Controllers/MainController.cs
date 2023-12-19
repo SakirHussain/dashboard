@@ -28,7 +28,7 @@ namespace Invoice.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Entry(RequestModel request) // action & data ;; data must be serialized json
+        public IActionResult Entry(RequestModel request) // action & data ;; data must be serialized json
         {
             ApiResponseModel response = new ApiResponseModel();
 
@@ -41,16 +41,17 @@ namespace Invoice.Controllers
             requestHeaders.AuthToken = headers["token"];
 
             bool check = _interHeaderVer.clientVerification(requestHeaders);
-            TokenRequestModel obj = new TokenRequestModel();
-            if (true)
+
+            if (request.Action == "Get Token")
             {
-                if (request.Action == "Get Token")
+                return RedirectToAction("GetToken", "Token", new { request = request.Data });
+            }
+
+            if (check)
+            {                
+                if (request.Action == "Top States")
                 {
-                    return RedirectToAction("GetToken", "Token", new { request = request.Data });
-                }
-                else if (request.Action == "Top States")
-                {
-                    return RedirectToAction("Invoice", "GetTopStates");
+                    return RedirectToAction("GetTopStates", "Invoice", new { request = request.Data});
                 }
             }
             else

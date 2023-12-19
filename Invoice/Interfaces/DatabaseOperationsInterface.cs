@@ -7,7 +7,7 @@ namespace Invoice.Interfaces
     {
         string topNStates(string n);
         Dictionary<string, string> ClientIdentityFetch(AuthRequestHeaders request);
-        (string, string) LoginDetailsFetch(string loginId);
+        bool LoginDetailsVerify(TokenRequestModel req);
         AuthResponseModel TokenCheck(string loginId);
     }
 }
