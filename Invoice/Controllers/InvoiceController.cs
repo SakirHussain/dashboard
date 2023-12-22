@@ -27,7 +27,7 @@ namespace Invoice.Controllers
 
             ApiResponseModel response = new ApiResponseModel();
 
-            response.data = (_interDbOp.topNStates(requestModel));
+            /*response.data = (_interDbOp.topNStates(requestModel));*/
            /* response.status = 1;
             response.error = null;*/
 

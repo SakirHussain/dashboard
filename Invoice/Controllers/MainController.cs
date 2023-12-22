@@ -19,12 +19,14 @@ namespace Invoice.Controllers
         private readonly HeaderVerificationInterface _interHeaderVer;
         private readonly HttpClient _httpClient;
         private readonly IControllerFactory _controllerFactory;
+        private readonly DatabaseOperationsInterface _interDbOp;
 
-        public MainController(IControllerFactory controllerFactory, HeaderVerificationInterface interHeaderVer, HttpClient httpClient)
+        public MainController(IControllerFactory controllerFactory, HeaderVerificationInterface interHeaderVer, HttpClient httpClient, DatabaseOperationsInterface interDbOp)
         {
             _interHeaderVer = interHeaderVer;
             _httpClient = httpClient;
             _controllerFactory = controllerFactory;
+            _interDbOp = interDbOp;
         }
 
         [HttpPost]
@@ -41,6 +43,8 @@ namespace Invoice.Controllers
             requestHeaders.AuthToken = headers["token"];
 
             bool check = _interHeaderVer.clientVerification(requestHeaders);
+
+            _interDbOp.Carti("DefaultConnect");
 
             if (request.Action == "Get Token")
             {

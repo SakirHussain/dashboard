@@ -33,7 +33,7 @@ namespace Invoice.Controllers
                                   
 
                        
-            if(_interDbOp.LoginDetailsVerify(requestModel))
+            /*if(_interDbOp.LoginDetailsVerify(requestModel))
             {
                 AuthResponseModel authRes = _interDbOp.TokenCheck(requestModel.LoginId);
                 response.status = 1;
@@ -47,7 +47,7 @@ namespace Invoice.Controllers
                 response.error.errorCode = 104;
                 response.error.errorMessage = "Invalid Login Details";
                 response.error.TimeStamp = DateTime.Now;
-            }
+            }*/
 
 
             return response;

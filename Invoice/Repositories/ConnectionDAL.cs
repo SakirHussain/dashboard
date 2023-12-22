@@ -9,7 +9,7 @@ namespace Invoice.Repositories
         private SqlCommand com = new SqlCommand();
         public ConnectionDAL(string connectionString) 
         {
-            con.ConnectionString = ConfigurationManager.ConnectionStrings[connectionString].ConnectionString;
+            /*con.ConnectionString = ConfigurationManager.ConnectionStrings[connectionString].ConnectionString;*/
         }
 
     }

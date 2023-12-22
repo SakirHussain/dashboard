@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json;
 using Invoice.Web_Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Invoice.Repositories
 {
@@ -14,22 +15,33 @@ namespace Invoice.Repositories
 
     public class DatabaseOperations : DatabaseOperationsInterface
     {
-        private readonly ApplicationDbContext _db;
+        private readonly DbContextOptionsFactory _dbContextOptionsFactory;
 
-        public DatabaseOperations(ApplicationDbContext db)
+        public DatabaseOperations(DbContextOptionsFactory dbContextOptionsFactory)
         {
-            _db = db;
-        }    
+            _dbContextOptionsFactory = dbContextOptionsFactory;
+        }
 
-        public string topNStates(InvoiceRequestModel requestModel)
+        public void Carti(string connectionString)
+        {
+            var options = _dbContextOptionsFactory.CreateOptions<ApplicationDbContext>(connectionString);
+
+            using (var dbContext = new ApplicationDbContext(options))
+            {
+                var record = dbContext.LoginDetails.FirstOrDefault(u => u.LoginName == "Varun Gupta");
+            }
+
+        }
+
+        /*public string topNStates(InvoiceRequestModel requestModel)
         { 
             List<InvoiceResponseModel> eInvoiceResponse = GetReport(requestModel);
 
-            /*var nStates = _db.GrossNetProduceStates
+            *//*var nStates = _db.GrossNetProduceStates
                                 .OrderByDescending(s => s.grossIncome)
                                 .Take(int.Parse(n)).Select(s => s.state)
                                 .ToList();
-*/
+*//*
             return JsonSerializer.Serialize(nStates);
             
         }
@@ -131,9 +143,9 @@ namespace Invoice.Repositories
             authResponse.TokenTime = record.TokenExpiry.ToString();
 
             return authResponse;
-        }
+        }*/
 
 
-        
+
     }
 }

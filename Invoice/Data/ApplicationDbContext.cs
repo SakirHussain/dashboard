@@ -1,4 +1,5 @@
-﻿using Invoice.RecordModels;
+﻿using Invoice.Record_Models;
+using Invoice.RecordModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Invoice.Data
@@ -6,16 +7,17 @@ namespace Invoice.Data
     public class ApplicationDbContext : DbContext
     {
         private readonly bool useConnection;
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, bool useConnection)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options/*, bool useConnection*/)
             : base(options)
         {
-            this.useConnection = useConnection;
+            //this.useConnection = useConnection;
         }
         public DbSet<StatesRecordModel> GrossNetProduceStates { get; set; }
         public DbSet<LoginRecordModel> LoginDetails { get; set; }
         public DbSet<ClientDetailsRecordModel> ClientIdentity { get; set; }
+        public DbSet<ActualTaxCollectionRecordModel> actual_tax_collection { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
@@ -23,6 +25,6 @@ namespace Invoice.Data
                 optionsBuilder.UseSqlServer(connectionString);
             }
             base.OnConfiguring(optionsBuilder);
-        }
+        }*/
     }
 }
