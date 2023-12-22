@@ -21,15 +21,50 @@ namespace Invoice.Repositories
             _db = db;
         }    
 
-        public string topNStates(string n)
+        public string topNStates(InvoiceRequestModel requestModel)
         { 
-            var nStates = _db.GrossNetProduceStates
+            List<InvoiceResponseModel> eInvoiceResponse = GetReport(requestModel);
+
+            /*var nStates = _db.GrossNetProduceStates
                                 .OrderByDescending(s => s.grossIncome)
                                 .Take(int.Parse(n)).Select(s => s.state)
                                 .ToList();
-
+*/
             return JsonSerializer.Serialize(nStates);
             
+        }
+
+        private List<InvoiceResponseModel> GetReport(InvoiceRequestModel requestModel)
+        {
+            string conststr = string.Empty;
+            SqlCommand cmd;
+
+            conststr = getConnectionString("POST");
+
+            List<InvoiceResponseModel> eInvoiceReponse = new List<InvoiceResponseModel>();
+
+            using (ConnectionDAL cd = new ConnectionDAL(conststr)) { 
+                try
+                { // executing procedure inside based on connection string
+                    cmd = new SqlCommand();
+
+                    cmd.CommandText = "usp_get_einv_app_stdata";
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.Add(new SqlParameter("@id", System.Data.SqlDbType.Int));
+
+                    cmd.Parameters["@id"].Value = requestModel.Id;
+                }
+            }
+            throw new NotImplementedException();
+        }
+
+        private string getConnectionString(string v)
+        {
+            if(v == "POST")
+            {
+                return "EInvoice";
+            }
+            throw new NotImplementedException();
         }
 
         public Dictionary<string, string> ClientIdentityFetch(AuthRequestHeaders request)
@@ -90,7 +125,8 @@ namespace Invoice.Repositories
             }
 
             _db.SaveChanges();
-
+            
+            
             authResponse.AuthToken = (Guid)record.Token;
             authResponse.TokenTime = record.TokenExpiry.ToString();
 

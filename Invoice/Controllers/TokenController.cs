@@ -36,7 +36,7 @@ namespace Invoice.Controllers
             if(_interDbOp.LoginDetailsVerify(requestModel))
             {
                 AuthResponseModel authRes = _interDbOp.TokenCheck(requestModel.LoginId);
-                
+                response.status = 1;
                 response.error = null;        
                 response.data =  JsonSerializer.Serialize(authRes);
             }

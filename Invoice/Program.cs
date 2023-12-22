@@ -6,11 +6,26 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<ApplicationDbContext>(option =>
+builder.Services.AddSingleton<DbContextOptionsFactory>();
+
+/*builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnect"));
 }
 );
+
+builder.Services.AddDbContext<ApplicationDbContext>(option =>
+{
+    option.UseSqlServer(builder.Configuration.GetConnectionString("EInvoice"));
+}
+);
+
+builder.Services.AddDbContext<ApplicationDbContext>(option =>
+{
+    option.UseSqlServer(builder.Configuration.GetConnectionString("EwayBillOfficer"));
+}
+);*/
+
 builder.Services.AddHttpClient();
 
 builder.Services.AddScoped(typeof(DatabaseOperationsInterface), typeof(DatabaseOperations));
