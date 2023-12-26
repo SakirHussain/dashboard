@@ -15,22 +15,22 @@ namespace Invoice.Repositories
 
     public class DatabaseOperations : DatabaseOperationsInterface
     {
-        private readonly DbContextOptionsFactory _dbContextOptionsFactory;
+        /*private readonly DbContextOptionsFactory _dbContextOptionsFactory;
 
         public DatabaseOperations(DbContextOptionsFactory dbContextOptionsFactory)
         {
             _dbContextOptionsFactory = dbContextOptionsFactory;
-        }
+        }*/
 
         public void Carti(string connectionString)
         {
-            var options = _dbContextOptionsFactory.CreateOptions<ApplicationDbContext>(connectionString);
+            /*var options = _dbContextOptionsFactory.CreateOptions<ApplicationDbContext>(connectionString);*/
 
-            using (var dbContext = new ApplicationDbContext(options))
-            {
-                var record = dbContext.LoginDetails.FirstOrDefault(u => u.LoginName == "Varun Gupta");
-            }
+            var dbContext = DbContextOptionsFactory.Create("DB3");
+           
+            var record = dbContext.LoginDetails.FirstOrDefault(u => u.LoginName == "Varun Gupta");
 
+            record.LoginName = "nihha";
         }
 
         /*public string topNStates(InvoiceRequestModel requestModel)
