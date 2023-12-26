@@ -29,16 +29,16 @@ namespace Invoice.Controllers
             
             AuthRequestHeaders requestHeaders = new AuthRequestHeaders();
             
-            TokenRequestModel requestModel = JsonSerializer.Deserialize<TokenRequestModel>(request);
-                                  
+            TokenRequestModel requestModel = JsonSerializer.Deserialize<TokenRequestModel>(request)!;
 
-                       
-            /*if(_interDbOp.LoginDetailsVerify(requestModel))
+
+
+            if (_interDbOp.LoginDetailsVerify(requestModel!))
             {
-                AuthResponseModel authRes = _interDbOp.TokenCheck(requestModel.LoginId);
+                AuthResponseModel authRes = _interDbOp.TokenCheck(requestModel!.LoginId);
                 response.status = 1;
-                response.error = null;        
-                response.data =  JsonSerializer.Serialize(authRes);
+                response.error = null;
+                response.data = JsonSerializer.Serialize(authRes);
             }
             else
             {
@@ -47,7 +47,7 @@ namespace Invoice.Controllers
                 response.error.errorCode = 104;
                 response.error.errorMessage = "Invalid Login Details";
                 response.error.TimeStamp = DateTime.Now;
-            }*/
+            }
 
 
             return response;

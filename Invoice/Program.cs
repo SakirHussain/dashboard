@@ -12,9 +12,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>();
 
 Dictionary<string, string> connStrs = new Dictionary<string, string>();
-connStrs.Add("DB1", builder.Configuration["ConnectionStrings:EInvoice"]);
-connStrs.Add("DB2", builder.Configuration["ConnectionStrings:EwayBillOfficer"]);
-connStrs.Add("DB3", builder.Configuration["ConnectionStrings:DefaultConnect"]);
+connStrs.Add("EInvoice", builder.Configuration["ConnectionStrings:EInvoice"]);
+connStrs.Add("EwayBillOfficer", builder.Configuration["ConnectionStrings:EwayBillOfficer"]);
+connStrs.Add("DefaultConnect", builder.Configuration["ConnectionStrings:DefaultConnect"]);
 DbContextOptionsFactory.SetConnectionString(connStrs);
 
 

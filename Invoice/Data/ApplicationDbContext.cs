@@ -1,5 +1,6 @@
 ﻿using Invoice.Record_Models;
 using Invoice.RecordModels;
+using Invoice.Web_Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Invoice.Data
@@ -16,6 +17,7 @@ namespace Invoice.Data
         public DbSet<LoginRecordModel> LoginDetails { get; set; }
         public DbSet<ClientDetailsRecordModel> ClientIdentity { get; set; }
         public DbSet<ActualTaxCollectionRecordModel> actual_tax_collection { get; set; }
+        public DbSet<InvoiceResponseModel> Test{ get; set; }
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

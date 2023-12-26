@@ -44,33 +44,34 @@ namespace Invoice.Controllers
 
             bool check = _interHeaderVer.clientVerification(requestHeaders);
 
-            _interDbOp.Carti("DefaultConnect");
+            /*_interDbOp.Carti("DefaultConnect");*/
 
-            if (request.Action == "Get Token")
+            if (request.Action == "Top States")
             {
-                return RedirectToAction("GetToken", "Token", new { request = request.Data });
+                return RedirectToAction("GetTopStates", "Invoice", new { request = request.Data });
             }
 
-            if (check)
-            {                
-                if (request.Action == "Top States")
+                if (check)
                 {
-                    return RedirectToAction("GetTopStates", "Invoice", new { request = request.Data});
+                    if (request.Action == "Top States")
+                    {
+                        return RedirectToAction("GetTopStates", "Invoice", new { request = request.Data });
+                    }
                 }
-            }
-            else
-            {
-                response.status = 0;
-                response.error.errorCode = StatusCodes.Status401Unauthorized;
-                response.error.errorMessage = "Unauthorized Access, Check header values";
-                response.data = null;
+                else
+                {
+                    response.status = 0;
+                    response.error.errorCode = StatusCodes.Status401Unauthorized;
+                    response.error.errorMessage = "Unauthorized Access, Check header values";
+                    response.data = null;
+
+                    return Ok(response);
+                }
 
                 return Ok(response);
             }
+        }
 
-            return Ok(response);
-        } 
     }
-        
-}
+
 

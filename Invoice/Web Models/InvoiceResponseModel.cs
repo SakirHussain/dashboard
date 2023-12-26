@@ -1,7 +1,10 @@
-﻿namespace Invoice.Web_Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Invoice.Web_Models
 {
     public class InvoiceResponseModel
     {
+        [Key]
         public int perdYear { get; set; }
         public string mon { get; set; }
         public decimal assessVal { get; set; }
