@@ -34,19 +34,19 @@ namespace Invoice.Repositories
             record.LoginName = "nihha";
         }
 
-        public string topNStates(InvoiceRequestModel requestModel)
+        /*public string topNStates(InvoiceRequestModel requestModel)
         {
             List<InvoiceResponseModel> eInvoiceResponse = GetReport(requestModel);
 
-            /*var nStates = _db.GrossNetProduceStates
+            *//*var nStates = _db.GrossNetProduceStates
                                 .OrderByDescending(s => s.grossIncome)
                                 .Take(int.Parse(n)).Select(s => s.state)
                                 .ToList();*/
 
-            /*return JsonSerializer.Serialize(nStates);*/
+            /*return JsonSerializer.Serialize(nStates);*//*
             return "";
 
-        }
+        }*/
 
         public List<InvoiceResponseModel> GetReport(InvoiceRequestModel requestModel)
         {
@@ -54,11 +54,21 @@ namespace Invoice.Repositories
             {
                 List<InvoiceResponseModel> eInvoiceReponse = new List<InvoiceResponseModel>();
 
-                var record = _db.actual_tax_collection.FirstOrDefault(u => u.perd_year == 2020);
+                string cmd = "EXEC usp_get_einv_app_stdata @Id, @StateCode, @SupType, @PerdYear, @PerdMon,'','', @OutIn,''";
 
-                eInvoiceReponse = _db.Test.FromSqlRaw<InvoiceResponseModel>($"usp_get_einv_app_stdata {requestModel.Id}," +
-                    $"{requestModel.stateCode},{requestModel.supType}," +
-                    $" {requestModel.perdYear},{requestModel.perdMon},'','',{requestModel.outIn},''").ToList<InvoiceResponseModel>();
+                var con = _db.Test.FromSqlRaw(cmd,
+                        new SqlParameter("@Id", requestModel.Id),
+                        new SqlParameter("@StateCode", requestModel.stateCode),
+                        new SqlParameter("@SupType", requestModel.supType),
+                        new SqlParameter("@PerdYear", requestModel.perdYear),
+                        new SqlParameter("@PerdMon", requestModel.perdMon),
+                        new SqlParameter("@OutIn", requestModel.outIn)
+                );
+
+                foreach (var item in con)
+                {
+                    eInvoiceReponse.Add(item);
+                }
 
                 return eInvoiceReponse;
 

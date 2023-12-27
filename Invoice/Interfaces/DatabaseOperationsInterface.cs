@@ -5,7 +5,9 @@ namespace Invoice.Interfaces
 {
     public interface DatabaseOperationsInterface
     {
-        string topNStates(InvoiceRequestModel n);
+        /*string topNStates(InvoiceRequestModel n);*/
+
+        List<InvoiceResponseModel> GetReport(InvoiceRequestModel requestModel);
         Dictionary<string, string> ClientIdentityFetch(AuthRequestHeaders request);
         bool LoginDetailsVerify(TokenRequestModel req);
         AuthResponseModel TokenCheck(string loginId);
