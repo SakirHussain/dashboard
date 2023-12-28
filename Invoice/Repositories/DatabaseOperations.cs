@@ -56,10 +56,8 @@ namespace Invoice.Repositories
                 string cmd = "EXEC usp_get_einv_app_stdata @Id, @StateCode, @SupType, @PerdYear, @PerdMon,'','', @OutIn, @ForUpto";
 
                 if (requestModel.Id == 1)
-                {
-                    List<ForIdOne> eInvoiceReponse = new List<ForIdOne>();
-
-                    eInvoiceReponse = _db.ForIdOne.FromSqlRaw(cmd,
+                {                    
+                    List<ForIdOne> eInvoiceReponse = _db.ForIdOne.FromSqlRaw(cmd,
                         new SqlParameter("@Id", requestModel.Id),
                         new SqlParameter("@StateCode", requestModel.stateCode),
                         new SqlParameter("@SupType", requestModel.supType),
@@ -74,9 +72,7 @@ namespace Invoice.Repositories
                 }
                 else if (requestModel.Id == 2)
                 {
-                    List<ForIdTwo> eInvoiceReponse = new List<ForIdTwo>();
-
-                    eInvoiceReponse = _db.ForIdTwo.FromSqlRaw(cmd,
+                    List<ForIdTwo> eInvoiceReponse = _db.ForIdTwo.FromSqlRaw(cmd,
                         new SqlParameter("@Id", requestModel.Id),
                         new SqlParameter("@StateCode", requestModel.stateCode),
                         new SqlParameter("@SupType", requestModel.supType),
@@ -91,9 +87,7 @@ namespace Invoice.Repositories
                 }
                 else if (requestModel.Id == 3)
                 {
-                    List<ForIdThree> eInvoiceReponse = new List<ForIdThree>();
-
-                    eInvoiceReponse = _db.ForIdThree.FromSqlRaw(cmd,
+                    List<ForIdThree> eInvoiceReponse = _db.ForIdThree.FromSqlRaw(cmd,
                         new SqlParameter("@Id", requestModel.Id),
                         new SqlParameter("@StateCode", requestModel.stateCode),
                         new SqlParameter("@SupType", requestModel.supType),
@@ -108,9 +102,7 @@ namespace Invoice.Repositories
                 }
                 else if (requestModel.Id == 4)
                 {
-                    List<ForIdFour> eInvoiceReponse = new List<ForIdFour>();
-
-                    eInvoiceReponse = _db.ForIdFour.FromSqlRaw(cmd,
+                    List<ForIdFour> eInvoiceReponse = _db.ForIdFour.FromSqlRaw(cmd,
                         new SqlParameter("@Id", requestModel.Id),
                         new SqlParameter("@StateCode", requestModel.stateCode),
                         new SqlParameter("@SupType", requestModel.supType),
@@ -125,9 +117,7 @@ namespace Invoice.Repositories
                 }
                 else if (requestModel.Id == 5)
                 {
-                    List<ForIdFive> eInvoiceReponse = new List<ForIdFive>();
-
-                    eInvoiceReponse = _db.ForIdFive.FromSqlRaw(cmd,
+                    List<ForIdFive> eInvoiceReponse = _db.ForIdFive.FromSqlRaw(cmd,
                         new SqlParameter("@Id", requestModel.Id),
                         new SqlParameter("@StateCode", requestModel.stateCode),
                         new SqlParameter("@SupType", requestModel.supType),
@@ -142,9 +132,7 @@ namespace Invoice.Repositories
                 }
                 else if (requestModel.Id == 6)
                 {
-                    List<ForIdSix> eInvoiceReponse = new List<ForIdSix>();
-
-                    eInvoiceReponse = _db.ForIdSix.FromSqlRaw(cmd,
+                    List<ForIdSix> eInvoiceReponse = _db.ForIdSix.FromSqlRaw(cmd,
                         new SqlParameter("@Id", requestModel.Id),
                         new SqlParameter("@StateCode", requestModel.stateCode),
                         new SqlParameter("@SupType", requestModel.supType),
@@ -156,6 +144,10 @@ namespace Invoice.Repositories
 
                     return eInvoiceReponse;
 
+                }
+                else
+                {
+                    return null;
                 }
 
 
@@ -183,8 +175,8 @@ namespace Invoice.Repositories
 
                     returnValues["client_id"] = clientRecord.client_id;
                     returnValues["client_secret"] = clientRecord.client_secret;
-                    returnValues["token"] = loginRecord.Token.ToString();
-                    returnValues["expiry"] = loginRecord.TokenExpiry.ToString();
+                    returnValues["token"] = loginRecord.Token.ToString()!;
+                    returnValues["expiry"] = loginRecord.TokenExpiry.ToString()!;
 
                     return returnValues;
                 }
@@ -201,12 +193,20 @@ namespace Invoice.Repositories
         {
             using(var _db = DbContextOptionsFactory.Create("DefaultConnect"))
             {
-                var record = _db.LoginDetails.FirstOrDefault(u => u.LoginId == req.LoginId);
-                if (record.Password == req.Password && record.PhoneNumber == req.PhoneNumber)
+                try
                 {
-                    return true;
+                    var record = _db.LoginDetails.FirstOrDefault(u => u.LoginId == req.LoginId);
+                    if (record.Password == req.Password && record.PhoneNumber == req.PhoneNumber)
+                    {
+                        return true;
+                    }
+                    else { return false; }
                 }
-                else { return false; }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+                
             }
             
         }

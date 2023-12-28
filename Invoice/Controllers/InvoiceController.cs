@@ -12,26 +12,41 @@ namespace Invoice.Controllers
     public class InvoiceController : ControllerBase
     {
         private readonly DatabaseOperationsInterface _interDbOp;
-        private readonly HeaderVerificationInterface _interHeaderVer;
 
         public InvoiceController(DatabaseOperationsInterface interDbOp, HeaderVerificationInterface interHeaderVer)
         {
             _interDbOp = interDbOp;
-            _interHeaderVer = interHeaderVer;
         }
 
         [HttpGet, HttpPost]
         public ApiResponseModel GetReport(string request) // new model
         {
-            InvoiceRequestModel requestModel = JsonSerializer.Deserialize<InvoiceRequestModel>(request)!;
-
             ApiResponseModel response = new ApiResponseModel();
 
-            response.data = JsonSerializer.Serialize(_interDbOp.GetReport(requestModel));
-            response.status = 1;
-            response.error = null;
+            try
+            {
+                InvoiceRequestModel requestModel = JsonSerializer.Deserialize<InvoiceRequestModel>(request)!;
+                var dat = _interDbOp.GetReport(requestModel);
 
-
+                if (dat != null)
+                {
+                    response.data = JsonSerializer.Serialize(dat);
+                    response.status = 1;
+                    response.error = null;
+                }
+                else
+                {
+                    response.data = null;
+                    response.status = 0;
+                    response.error.errorMessage = "Input Values Invalid";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.data = null;
+                response.status = 0;
+                response.error.errorMessage = "Input Values Invalid";
+            }         
             return response;
         }
     }
