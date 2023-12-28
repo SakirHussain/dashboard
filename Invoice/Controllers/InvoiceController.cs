@@ -21,23 +21,11 @@ namespace Invoice.Controllers
         }
 
         [HttpGet, HttpPost]
-        public ApiResponseModel GetTopStates(string request) // new model
+        public ApiResponseModel GetReport(string request) // new model
         {
-            InvoiceRequestModel requestModel = JsonSerializer.Deserialize<InvoiceRequestModel>(request);
-
-            /*InvoiceRequestModel requestModel = new InvoiceRequestModel
-            {
-                Id = 1,
-                stateCode = 199,
-                supType = "B2B",
-                perdYear = 2023,
-                perdMon = 8,
-                outIn = "OUT"
-            };*/
-
+            InvoiceRequestModel requestModel = JsonSerializer.Deserialize<InvoiceRequestModel>(request)!;
 
             ApiResponseModel response = new ApiResponseModel();
-
 
             response.data = JsonSerializer.Serialize(_interDbOp.GetReport(requestModel));
             response.status = 1;

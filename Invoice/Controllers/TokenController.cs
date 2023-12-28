@@ -26,9 +26,7 @@ namespace Invoice.Controllers
         public ApiResponseModel GetToken(string request)
         {
             ApiResponseModel response = new ApiResponseModel();
-            
-            AuthRequestHeaders requestHeaders = new AuthRequestHeaders();
-            
+                        
             TokenRequestModel requestModel = JsonSerializer.Deserialize<TokenRequestModel>(request)!;
 
 

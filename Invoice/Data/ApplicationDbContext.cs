@@ -20,6 +20,11 @@ namespace Invoice.Data
         public DbSet<InvoiceResponseModel> Test{ get; set; }
         public DbSet<ForIdOne> ForIdOne { get; set; }
         public DbSet<ForIdTwo> ForIdTwo { get; set; }
+        public DbSet<ForIdThree> ForIdThree { get; set; }
+        public DbSet<ForIdFour> ForIdFour { get; set; }
+        public DbSet<ForIdFive> ForIdFive { get; set; }
+        public DbSet<ForIdSix> ForIdSix { get; set; }
+
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

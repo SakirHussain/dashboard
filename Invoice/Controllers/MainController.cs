@@ -17,64 +17,54 @@ namespace Invoice.Controllers
     public class MainController : ControllerBase
     {
         private readonly HeaderVerificationInterface _interHeaderVer;
-        private readonly HttpClient _httpClient;
-        private readonly IControllerFactory _controllerFactory;
-        private readonly DatabaseOperationsInterface _interDbOp;
 
-        public MainController(IControllerFactory controllerFactory, HeaderVerificationInterface interHeaderVer, HttpClient httpClient, DatabaseOperationsInterface interDbOp)
+        public MainController(HeaderVerificationInterface interHeaderVer)
         {
             _interHeaderVer = interHeaderVer;
-            _httpClient = httpClient;
-            _controllerFactory = controllerFactory;
-            _interDbOp = interDbOp;
         }
 
         [HttpPost]
         public IActionResult Entry(RequestModel request) // action & data ;; data must be serialized json
-        {
-            
-            
+        {            
             
             ApiResponseModel response = new ApiResponseModel();
+
 
             var headers = HttpContext.Request.Headers;
 
             AuthRequestHeaders requestHeaders = new AuthRequestHeaders();
-            requestHeaders.ClientId = headers["client-id"];
-            requestHeaders.ClientSecret = headers["client-secret"];
-            requestHeaders.LoginId = headers["login-id"];
-            requestHeaders.AuthToken = headers["token"];
+            requestHeaders.ClientId = headers["client-id"]!;
+            requestHeaders.ClientSecret = headers["client-secret"]!;
+            requestHeaders.LoginId = headers["login-id"]!;
+            requestHeaders.AuthToken = headers["token"]!;
 
             bool check = _interHeaderVer.clientVerification(requestHeaders);
 
-            /*_interDbOp.Carti("DefaultConnect");*/
-
-            if (request.Action == "Top States")
+            if (request.Action == "Get Token")
             {
-                return RedirectToAction("GetTopStates", "Invoice", new { request = request.Data });
+                return RedirectToAction("GetToken", "Token", new { request = request.Data });
             }
 
-                if (check)
-                {
-                    if (request.Action == "Top States")
+            if (check)
+            {
+                    if (request.Action == "Get Report")
                     {
-                        return RedirectToAction("GetTopStates", "Invoice", new { request = request.Data });
+                        return RedirectToAction("GetReport", "Invoice", new { request = request.Data });
                     }
-                }
-                else
-                {
-                    response.status = 0;
-                    response.error.errorCode = StatusCodes.Status401Unauthorized;
-                    response.error.errorMessage = "Unauthorized Access, Check header values";
-                    response.data = null;
-
-                    return Ok(response);
-                }
+            }
+            else
+            {
+                response.status = 0;
+                response.error.errorCode = StatusCodes.Status401Unauthorized;
+                response.error.errorMessage = "Unauthorized Access, Check header values";
+                response.data = null;
 
                 return Ok(response);
             }
-        }
 
+                return Ok(response);
+        }
     }
+}
 
 

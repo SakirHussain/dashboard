@@ -88,9 +88,77 @@ namespace Invoice.Repositories
 
                     return eInvoiceReponse;
 
-                }    
+                }
+                else if (requestModel.Id == 3)
+                {
+                    List<ForIdThree> eInvoiceReponse = new List<ForIdThree>();
 
-                
+                    eInvoiceReponse = _db.ForIdThree.FromSqlRaw(cmd,
+                        new SqlParameter("@Id", requestModel.Id),
+                        new SqlParameter("@StateCode", requestModel.stateCode),
+                        new SqlParameter("@SupType", requestModel.supType),
+                        new SqlParameter("@PerdYear", requestModel.perdYear),
+                        new SqlParameter("@PerdMon", requestModel.perdMon),
+                        new SqlParameter("@OutIn", requestModel.outIn),
+                        new SqlParameter("@ForUpto", requestModel.for_upto)
+                    ).AsNoTracking().ToList();
+
+                    return eInvoiceReponse;
+
+                }
+                else if (requestModel.Id == 4)
+                {
+                    List<ForIdFour> eInvoiceReponse = new List<ForIdFour>();
+
+                    eInvoiceReponse = _db.ForIdFour.FromSqlRaw(cmd,
+                        new SqlParameter("@Id", requestModel.Id),
+                        new SqlParameter("@StateCode", requestModel.stateCode),
+                        new SqlParameter("@SupType", requestModel.supType),
+                        new SqlParameter("@PerdYear", requestModel.perdYear),
+                        new SqlParameter("@PerdMon", requestModel.perdMon),
+                        new SqlParameter("@OutIn", requestModel.outIn),
+                        new SqlParameter("@ForUpto", requestModel.for_upto)
+                    ).AsNoTracking().ToList();
+
+                    return eInvoiceReponse;
+
+                }
+                else if (requestModel.Id == 5)
+                {
+                    List<ForIdFive> eInvoiceReponse = new List<ForIdFive>();
+
+                    eInvoiceReponse = _db.ForIdFive.FromSqlRaw(cmd,
+                        new SqlParameter("@Id", requestModel.Id),
+                        new SqlParameter("@StateCode", requestModel.stateCode),
+                        new SqlParameter("@SupType", requestModel.supType),
+                        new SqlParameter("@PerdYear", requestModel.perdYear),
+                        new SqlParameter("@PerdMon", requestModel.perdMon),
+                        new SqlParameter("@OutIn", requestModel.outIn),
+                        new SqlParameter("@ForUpto", requestModel.for_upto)
+                    ).AsNoTracking().ToList();
+
+                    return eInvoiceReponse;
+
+                }
+                else if (requestModel.Id == 6)
+                {
+                    List<ForIdSix> eInvoiceReponse = new List<ForIdSix>();
+
+                    eInvoiceReponse = _db.ForIdSix.FromSqlRaw(cmd,
+                        new SqlParameter("@Id", requestModel.Id),
+                        new SqlParameter("@StateCode", requestModel.stateCode),
+                        new SqlParameter("@SupType", requestModel.supType),
+                        new SqlParameter("@PerdYear", requestModel.perdYear),
+                        new SqlParameter("@PerdMon", requestModel.perdMon),
+                        new SqlParameter("@OutIn", requestModel.outIn),
+                        new SqlParameter("@ForUpto", requestModel.for_upto)
+                    ).AsNoTracking().ToList();
+
+                    return eInvoiceReponse;
+
+                }
+
+
 
             }
             
@@ -164,7 +232,7 @@ namespace Invoice.Repositories
                     if (record.TokenExpiry <= DateTime.Now)
                     {
                         record.Token = Guid.NewGuid();
-                        record.TokenExpiry = DateTime.Now.AddMinutes(3);
+                        record.TokenExpiry = DateTime.Now.AddHours(1);
                     }
                 }
 
