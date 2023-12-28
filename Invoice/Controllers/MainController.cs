@@ -17,28 +17,26 @@ namespace Invoice.Controllers
     public class MainController : ControllerBase
     {
         private readonly HeaderVerificationInterface _interHeaderVer;
-        private readonly HttpClient _httpClient;
-        private readonly IControllerFactory _controllerFactory;
 
-        public MainController(IControllerFactory controllerFactory, HeaderVerificationInterface interHeaderVer, HttpClient httpClient)
+        public MainController(HeaderVerificationInterface interHeaderVer)
         {
             _interHeaderVer = interHeaderVer;
-            _httpClient = httpClient;
-            _controllerFactory = controllerFactory;
         }
 
         [HttpPost]
         public IActionResult Entry(RequestModel request) // action & data ;; data must be serialized json
-        {
+        {            
+            
             ApiResponseModel response = new ApiResponseModel();
+
 
             var headers = HttpContext.Request.Headers;
 
             AuthRequestHeaders requestHeaders = new AuthRequestHeaders();
-            requestHeaders.ClientId = headers["client-id"];
-            requestHeaders.ClientSecret = headers["client-secret"];
-            requestHeaders.LoginId = headers["login-id"];
-            requestHeaders.AuthToken = headers["token"];
+            requestHeaders.ClientId = headers["client-id"]!;
+            requestHeaders.ClientSecret = headers["client-secret"]!;
+            requestHeaders.LoginId = headers["login-id"]!;
+            requestHeaders.AuthToken = headers["token"]!;
 
             bool check = _interHeaderVer.clientVerification(requestHeaders);
 
@@ -48,11 +46,11 @@ namespace Invoice.Controllers
             }
 
             if (check)
-            {                
-                if (request.Action == "Top States")
-                {
-                    return RedirectToAction("GetTopStates", "Invoice", new { request = request.Data});
-                }
+            {
+                    if (request.Action == "Get Report")
+                    {
+                        return RedirectToAction("GetReport", "Invoice", new { request = request.Data });
+                    }
             }
             else
             {
@@ -64,9 +62,9 @@ namespace Invoice.Controllers
                 return Ok(response);
             }
 
-            return Ok(response);
-        } 
+                return Ok(response);
+        }
     }
-        
 }
+
 

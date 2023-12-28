@@ -7,6 +7,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json;
 using Invoice.Web_Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Invoice.Record_Models;
 
 namespace Invoice.Repositories
 {
@@ -14,126 +17,234 @@ namespace Invoice.Repositories
 
     public class DatabaseOperations : DatabaseOperationsInterface
     {
-        private readonly ApplicationDbContext _db;
+        /*private readonly DbContextOptionsFactory _dbContextOptionsFactory;
 
-        public DatabaseOperations(ApplicationDbContext db)
+        public DatabaseOperations(DbContextOptionsFactory dbContextOptionsFactory)
         {
-            _db = db;
-        }    
+            _dbContextOptionsFactory = dbContextOptionsFactory;
+        }*/
 
-        public string topNStates(InvoiceRequestModel requestModel)
-        { 
+        public void Carti(string connectionString)
+        {
+            /*var options = _dbContextOptionsFactory.CreateOptions<ApplicationDbContext>(connectionString);*/
+
+            var dbContext = DbContextOptionsFactory.Create("DefaultConnect");
+           
+            var record = dbContext.LoginDetails.FirstOrDefault(u => u.LoginName == "Varun Gupta");
+
+            record.LoginName = "nihha";
+        }
+
+        /*public string topNStates(InvoiceRequestModel requestModel)
+        {
             List<InvoiceResponseModel> eInvoiceResponse = GetReport(requestModel);
 
-            /*var nStates = _db.GrossNetProduceStates
+            *//*var nStates = _db.GrossNetProduceStates
                                 .OrderByDescending(s => s.grossIncome)
                                 .Take(int.Parse(n)).Select(s => s.state)
-                                .ToList();
-*/
-            return JsonSerializer.Serialize(nStates);
-            
-        }
+                                .ToList();*/
 
-        private List<InvoiceResponseModel> GetReport(InvoiceRequestModel requestModel)
+            /*return JsonSerializer.Serialize(nStates);*//*
+            return "";
+
+        }*/
+
+        public object GetReport(InvoiceRequestModel requestModel)
         {
-            string conststr = string.Empty;
-            SqlCommand cmd;
-
-            conststr = getConnectionString("POST");
-
-            List<InvoiceResponseModel> eInvoiceReponse = new List<InvoiceResponseModel>();
-
-            using (ConnectionDAL cd = new ConnectionDAL(conststr)) { 
-                try
-                { // executing procedure inside based on connection string
-                    cmd = new SqlCommand();
-
-                    cmd.CommandText = "usp_get_einv_app_stdata";
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.Add(new SqlParameter("@id", System.Data.SqlDbType.Int));
-
-                    cmd.Parameters["@id"].Value = requestModel.Id;
-                }
-            }
-            throw new NotImplementedException();
-        }
-
-        private string getConnectionString(string v)
-        {
-            if(v == "POST")
+            using (var _db = DbContextOptionsFactory.Create("EInvoice"))
             {
-                return "EInvoice";
+                string cmd = "EXEC usp_get_einv_app_stdata @Id, @StateCode, @SupType, @PerdYear, @PerdMon,'','', @OutIn, @ForUpto";
+
+                if (requestModel.Id == 1)
+                {
+                    List<ForIdOne> eInvoiceReponse = new List<ForIdOne>();
+
+                    eInvoiceReponse = _db.ForIdOne.FromSqlRaw(cmd,
+                        new SqlParameter("@Id", requestModel.Id),
+                        new SqlParameter("@StateCode", requestModel.stateCode),
+                        new SqlParameter("@SupType", requestModel.supType),
+                        new SqlParameter("@PerdYear", requestModel.perdYear),
+                        new SqlParameter("@PerdMon", requestModel.perdMon),
+                        new SqlParameter("@OutIn", requestModel.outIn),
+                        new SqlParameter("@ForUpto", requestModel.for_upto)
+                    ).AsNoTracking().ToList();
+
+                    return eInvoiceReponse;
+
+                }
+                else if (requestModel.Id == 2)
+                {
+                    List<ForIdTwo> eInvoiceReponse = new List<ForIdTwo>();
+
+                    eInvoiceReponse = _db.ForIdTwo.FromSqlRaw(cmd,
+                        new SqlParameter("@Id", requestModel.Id),
+                        new SqlParameter("@StateCode", requestModel.stateCode),
+                        new SqlParameter("@SupType", requestModel.supType),
+                        new SqlParameter("@PerdYear", requestModel.perdYear),
+                        new SqlParameter("@PerdMon", requestModel.perdMon),
+                        new SqlParameter("@OutIn", requestModel.outIn),
+                        new SqlParameter("@ForUpto", requestModel.for_upto)
+                    ).AsNoTracking().ToList();
+
+                    return eInvoiceReponse;
+
+                }
+                else if (requestModel.Id == 3)
+                {
+                    List<ForIdThree> eInvoiceReponse = new List<ForIdThree>();
+
+                    eInvoiceReponse = _db.ForIdThree.FromSqlRaw(cmd,
+                        new SqlParameter("@Id", requestModel.Id),
+                        new SqlParameter("@StateCode", requestModel.stateCode),
+                        new SqlParameter("@SupType", requestModel.supType),
+                        new SqlParameter("@PerdYear", requestModel.perdYear),
+                        new SqlParameter("@PerdMon", requestModel.perdMon),
+                        new SqlParameter("@OutIn", requestModel.outIn),
+                        new SqlParameter("@ForUpto", requestModel.for_upto)
+                    ).AsNoTracking().ToList();
+
+                    return eInvoiceReponse;
+
+                }
+                else if (requestModel.Id == 4)
+                {
+                    List<ForIdFour> eInvoiceReponse = new List<ForIdFour>();
+
+                    eInvoiceReponse = _db.ForIdFour.FromSqlRaw(cmd,
+                        new SqlParameter("@Id", requestModel.Id),
+                        new SqlParameter("@StateCode", requestModel.stateCode),
+                        new SqlParameter("@SupType", requestModel.supType),
+                        new SqlParameter("@PerdYear", requestModel.perdYear),
+                        new SqlParameter("@PerdMon", requestModel.perdMon),
+                        new SqlParameter("@OutIn", requestModel.outIn),
+                        new SqlParameter("@ForUpto", requestModel.for_upto)
+                    ).AsNoTracking().ToList();
+
+                    return eInvoiceReponse;
+
+                }
+                else if (requestModel.Id == 5)
+                {
+                    List<ForIdFive> eInvoiceReponse = new List<ForIdFive>();
+
+                    eInvoiceReponse = _db.ForIdFive.FromSqlRaw(cmd,
+                        new SqlParameter("@Id", requestModel.Id),
+                        new SqlParameter("@StateCode", requestModel.stateCode),
+                        new SqlParameter("@SupType", requestModel.supType),
+                        new SqlParameter("@PerdYear", requestModel.perdYear),
+                        new SqlParameter("@PerdMon", requestModel.perdMon),
+                        new SqlParameter("@OutIn", requestModel.outIn),
+                        new SqlParameter("@ForUpto", requestModel.for_upto)
+                    ).AsNoTracking().ToList();
+
+                    return eInvoiceReponse;
+
+                }
+                else if (requestModel.Id == 6)
+                {
+                    List<ForIdSix> eInvoiceReponse = new List<ForIdSix>();
+
+                    eInvoiceReponse = _db.ForIdSix.FromSqlRaw(cmd,
+                        new SqlParameter("@Id", requestModel.Id),
+                        new SqlParameter("@StateCode", requestModel.stateCode),
+                        new SqlParameter("@SupType", requestModel.supType),
+                        new SqlParameter("@PerdYear", requestModel.perdYear),
+                        new SqlParameter("@PerdMon", requestModel.perdMon),
+                        new SqlParameter("@OutIn", requestModel.outIn),
+                        new SqlParameter("@ForUpto", requestModel.for_upto)
+                    ).AsNoTracking().ToList();
+
+                    return eInvoiceReponse;
+
+                }
+
+
+
             }
+            
+
+
+            // NEED TO EXECUTE STORED PRODECURE HERE
+
             throw new NotImplementedException();
         }
 
         public Dictionary<string, string> ClientIdentityFetch(AuthRequestHeaders request)
-        {
-            var clientRecord =  _db.ClientIdentity.FirstOrDefault(u => u.client_id == request.ClientId);
-            var loginRecord = _db.LoginDetails.FirstOrDefault(u => u.LoginId == request.LoginId);
-
-
-            if (clientRecord != null && loginRecord != null)
+        {            
+            using (var _db = DbContextOptionsFactory.Create("DefaultConnect"))
             {
-                Dictionary<string, string> returnValues = new Dictionary<string, string>();
+                var clientRecord = _db.ClientIdentity.FirstOrDefault(u => u.client_id == request.ClientId);
+                var loginRecord = _db.LoginDetails.FirstOrDefault(u => u.LoginId == request.LoginId);
 
-                returnValues["client_id"] = clientRecord.client_id;
-                returnValues["client_secret"] = clientRecord.client_secret;
-                returnValues["token"] = loginRecord.Token.ToString();
-                returnValues["expiry"] = loginRecord.TokenExpiry.ToString();
 
-                return returnValues;
-            }
-            else
-            {
-                return null;
-            }
+                if (clientRecord != null && loginRecord != null)
+                {
+                    Dictionary<string, string> returnValues = new Dictionary<string, string>();
+
+                    returnValues["client_id"] = clientRecord.client_id;
+                    returnValues["client_secret"] = clientRecord.client_secret;
+                    returnValues["token"] = loginRecord.Token.ToString();
+                    returnValues["expiry"] = loginRecord.TokenExpiry.ToString();
+
+                    return returnValues;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }           
 
         }
 
         public bool LoginDetailsVerify(TokenRequestModel req)
         {
-            var record = _db.LoginDetails.FirstOrDefault(u => u.LoginId == req.LoginId);
-            if (record.Password == req.Password && record.PhoneNumber == req.PhoneNumber)
+            using(var _db = DbContextOptionsFactory.Create("DefaultConnect"))
             {
-                return true;
+                var record = _db.LoginDetails.FirstOrDefault(u => u.LoginId == req.LoginId);
+                if (record.Password == req.Password && record.PhoneNumber == req.PhoneNumber)
+                {
+                    return true;
+                }
+                else { return false; }
             }
-            else { return false; }
+            
         }
 
         public AuthResponseModel TokenCheck(string loginId)
         {
-            AuthResponseModel authResponse = new AuthResponseModel();
-
-            var record = _db.LoginDetails.FirstOrDefault(u => u.LoginId == loginId);
-
-            if (record == null) { return null; }
-
-            if (record.Token == null)
+            using(var _db = DbContextOptionsFactory.Create("DefaultConnect"))
             {
-                record.Token = Guid.NewGuid();
-                record.TokenExpiry = DateTime.Now.AddHours(1);
-                //record.TokenExpiry = DateTime.Now.AddMinutes(3);              
-            }
-            else
-            {
-                if(record.TokenExpiry <= DateTime.Now)
+                AuthResponseModel authResponse = new AuthResponseModel();
+
+                var record = _db.LoginDetails.FirstOrDefault(u => u.LoginId == loginId);
+
+                if (record == null) { return null; }
+
+                if (record.Token == null)
                 {
                     record.Token = Guid.NewGuid();
-                    record.TokenExpiry = DateTime.Now.AddMinutes(3);
+                    record.TokenExpiry = DateTime.Now.AddHours(1);
+                    //record.TokenExpiry = DateTime.Now.AddMinutes(3);              
                 }
+                else
+                {
+                    if (record.TokenExpiry <= DateTime.Now)
+                    {
+                        record.Token = Guid.NewGuid();
+                        record.TokenExpiry = DateTime.Now.AddHours(1);
+                    }
+                }
+
+                _db.SaveChanges();
+
+
+                authResponse.AuthToken = (Guid)record.Token;
+                authResponse.TokenTime = record.TokenExpiry.ToString();
+
+                return authResponse;
             }
-
-            _db.SaveChanges();
             
-            
-            authResponse.AuthToken = (Guid)record.Token;
-            authResponse.TokenTime = record.TokenExpiry.ToString();
-
-            return authResponse;
         }
-
-
-        
     }
 }

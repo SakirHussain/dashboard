@@ -6,6 +6,6 @@ namespace Invoice.WebModels
     {
         public int status { get; set; }
         public Error error { get; set; } = new Error();
-        public string data { get; set; }
+        public string data { get; set; } = string.Empty;
     }
 }

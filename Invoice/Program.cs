@@ -2,18 +2,23 @@ using Invoice.Data;
 using Invoice.Repositories;
 using Invoice.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddSingleton<DbContextOptionsFactory>();
+/*builder.Services.AddSingleton<DbContextOptionsFactory>();*/
 
-/*builder.Services.AddDbContext<ApplicationDbContext>(option =>
-{
-    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnect"));
-}
-);
+builder.Services.AddDbContext<ApplicationDbContext>();
 
+Dictionary<string, string> connStrs = new Dictionary<string, string>();
+connStrs.Add("EInvoice", builder.Configuration["ConnectionStrings:EInvoice"]);
+connStrs.Add("EwayBillOfficer", builder.Configuration["ConnectionStrings:EwayBillOfficer"]);
+connStrs.Add("DefaultConnect", builder.Configuration["ConnectionStrings:DefaultConnect"]);
+DbContextOptionsFactory.SetConnectionString(connStrs);
+
+
+/*
 builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
     option.UseSqlServer(builder.Configuration.GetConnectionString("EInvoice"));

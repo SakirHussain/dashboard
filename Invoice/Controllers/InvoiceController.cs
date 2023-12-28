@@ -21,15 +21,15 @@ namespace Invoice.Controllers
         }
 
         [HttpGet, HttpPost]
-        public ApiResponseModel GetTopStates(string request) // new model
+        public ApiResponseModel GetReport(string request) // new model
         {
-            InvoiceRequestModel requestModel = JsonSerializer.Deserialize<InvoiceRequestModel>(request);
+            InvoiceRequestModel requestModel = JsonSerializer.Deserialize<InvoiceRequestModel>(request)!;
 
             ApiResponseModel response = new ApiResponseModel();
 
-            response.data = (_interDbOp.topNStates(requestModel));
-           /* response.status = 1;
-            response.error = null;*/
+            response.data = JsonSerializer.Serialize(_interDbOp.GetReport(requestModel));
+            response.status = 1;
+            response.error = null;
 
 
             return response;
