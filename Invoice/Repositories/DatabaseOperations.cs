@@ -9,6 +9,7 @@ using System.Text.Json;
 using Invoice.Web_Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Invoice.Record_Models;
 
 namespace Invoice.Repositories
 {
@@ -48,29 +49,48 @@ namespace Invoice.Repositories
 
         }*/
 
-        public List<InvoiceResponseModel> GetReport(InvoiceRequestModel requestModel)
+        public object GetReport(InvoiceRequestModel requestModel)
         {
             using (var _db = DbContextOptionsFactory.Create("EInvoice"))
             {
-                List<InvoiceResponseModel> eInvoiceReponse = new List<InvoiceResponseModel>();
+                string cmd = "EXEC usp_get_einv_app_stdata @Id, @StateCode, @SupType, @PerdYear, @PerdMon,'','', @OutIn, @ForUpto";
 
-                string cmd = "EXEC usp_get_einv_app_stdata @Id, @StateCode, @SupType, @PerdYear, @PerdMon,'','', @OutIn,''";
+                if (requestModel.Id == 1)
+                {
+                    List<ForIdOne> eInvoiceReponse = new List<ForIdOne>();
 
-                var con = _db.Test.FromSqlRaw(cmd,
+                    eInvoiceReponse = _db.ForIdOne.FromSqlRaw(cmd,
                         new SqlParameter("@Id", requestModel.Id),
                         new SqlParameter("@StateCode", requestModel.stateCode),
                         new SqlParameter("@SupType", requestModel.supType),
                         new SqlParameter("@PerdYear", requestModel.perdYear),
                         new SqlParameter("@PerdMon", requestModel.perdMon),
-                        new SqlParameter("@OutIn", requestModel.outIn)
-                );
+                        new SqlParameter("@OutIn", requestModel.outIn),
+                        new SqlParameter("@ForUpto", requestModel.for_upto)
+                    ).AsNoTracking().ToList();
 
-                foreach (var item in con)
-                {
-                    eInvoiceReponse.Add(item);
+                    return eInvoiceReponse;
+
                 }
+                else if (requestModel.Id == 2)
+                {
+                    List<ForIdTwo> eInvoiceReponse = new List<ForIdTwo>();
 
-                return eInvoiceReponse;
+                    eInvoiceReponse = _db.ForIdTwo.FromSqlRaw(cmd,
+                        new SqlParameter("@Id", requestModel.Id),
+                        new SqlParameter("@StateCode", requestModel.stateCode),
+                        new SqlParameter("@SupType", requestModel.supType),
+                        new SqlParameter("@PerdYear", requestModel.perdYear),
+                        new SqlParameter("@PerdMon", requestModel.perdMon),
+                        new SqlParameter("@OutIn", requestModel.outIn),
+                        new SqlParameter("@ForUpto", requestModel.for_upto)
+                    ).AsNoTracking().ToList();
+
+                    return eInvoiceReponse;
+
+                }    
+
+                
 
             }
             

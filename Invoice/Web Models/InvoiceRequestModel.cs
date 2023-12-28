@@ -11,5 +11,6 @@ namespace Invoice.Web_Models
         public int perdYear { get; set; }
         public int perdMon { get; set; }
         public string outIn{ get; set;}
+        public string for_upto { get; set; }
     }
 }

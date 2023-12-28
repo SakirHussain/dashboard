@@ -32,6 +32,9 @@ namespace Invoice.Controllers
         [HttpPost]
         public IActionResult Entry(RequestModel request) // action & data ;; data must be serialized json
         {
+            
+            
+            
             ApiResponseModel response = new ApiResponseModel();
 
             var headers = HttpContext.Request.Headers;

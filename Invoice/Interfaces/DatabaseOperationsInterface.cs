@@ -7,7 +7,7 @@ namespace Invoice.Interfaces
     {
         /*string topNStates(InvoiceRequestModel n);*/
 
-        List<InvoiceResponseModel> GetReport(InvoiceRequestModel requestModel);
+        object GetReport(InvoiceRequestModel requestModel);
         Dictionary<string, string> ClientIdentityFetch(AuthRequestHeaders request);
         bool LoginDetailsVerify(TokenRequestModel req);
         AuthResponseModel TokenCheck(string loginId);

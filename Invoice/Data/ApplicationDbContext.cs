@@ -18,6 +18,8 @@ namespace Invoice.Data
         public DbSet<ClientDetailsRecordModel> ClientIdentity { get; set; }
         public DbSet<ActualTaxCollectionRecordModel> actual_tax_collection { get; set; }
         public DbSet<InvoiceResponseModel> Test{ get; set; }
+        public DbSet<ForIdOne> ForIdOne { get; set; }
+        public DbSet<ForIdTwo> ForIdTwo { get; set; }
 
         /*protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
