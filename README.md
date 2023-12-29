@@ -1,7 +1,6 @@
 # Overview
 
-This repository contains the source code for an Invoice System, which includes components such as controllers, repositories, interfaces, and database operations. The system is designed to manage and generate various types of reports related to invoices and client authentication.
-
+This repository contains the source code for which includes components such as controllers, repositories, interfaces, and database operations. The system is designed to manage and generate various types of reports related to Einvoices.
 # Table of Contents
 
 - [Project Structure](#project-structure)
