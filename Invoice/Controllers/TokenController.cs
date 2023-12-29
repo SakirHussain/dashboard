@@ -1,4 +1,5 @@
 ﻿using Invoice.Interfaces;
+using Invoice.Models;
 using Invoice.Web_Models;
 using Invoice.WebModels;
 using Microsoft.AspNetCore.Mvc;
@@ -55,9 +56,7 @@ namespace Invoice.Controllers
                     // Set response properties for invalid login details
                     response.status = 0;
                     response.data = null;
-                    response.error.errorCode = 104;
-                    response.error.errorMessage = "Invalid Login Details";
-                    response.error.TimeStamp = DateTime.Now;
+                    response.error = ErrorMessages.GetErrorMessage(response.error, new UnauthorizedAccessException());
                 }
             }
             catch (Exception ex)
@@ -65,9 +64,7 @@ namespace Invoice.Controllers
                 // Set response properties for exception scenarios
                 response.status = 0;
                 response.data = null;
-                response.error.errorCode = 500; // Internal Server Error
-                response.error.errorMessage = "An error occurred while processing the request.";
-                response.error.TimeStamp = DateTime.Now;
+                response.error = ErrorMessages.GetErrorMessage(response.error!, new FormatException());
             }
 
             return response;

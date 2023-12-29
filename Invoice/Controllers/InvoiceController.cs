@@ -1,7 +1,9 @@
 ﻿using Invoice.Interfaces;
+using Invoice.Models;
 using Invoice.Web_Models;
 using Invoice.WebModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Text.Json;
 
 namespace Invoice.Controllers
@@ -54,7 +56,7 @@ namespace Invoice.Controllers
                     // Set response properties for invalid input values
                     response.data = null;
                     response.status = 0;
-                    response.error.errorMessage = "Input Values Invalid";
+                    response.error = ErrorMessages.GetErrorMessage(response.error, new FormatException());
                 }
             }
             catch (Exception ex)
@@ -62,7 +64,7 @@ namespace Invoice.Controllers
                 // Set response properties for exception scenarios
                 response.data = null;
                 response.status = 0;
-                response.error.errorMessage = "An error occurred while processing the request.";
+                response.error = ErrorMessages.GetErrorMessage(response.error!, new DataException());
             }
 
             return response;

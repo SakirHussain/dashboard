@@ -1,4 +1,5 @@
 ﻿using Invoice.Interfaces;
+using Invoice.Models;
 using Invoice.Web_Models;
 using Invoice.WebModels;
 using Microsoft.AspNetCore.Mvc;
@@ -64,9 +65,8 @@ namespace Invoice.Controllers
             else
             {
                 // Set response properties for unauthorized access
-                response.status = 0;
-                response.error.errorCode = StatusCodes.Status401Unauthorized;
-                response.error.errorMessage = "Unauthorized Access, Check header values";
+                response.status = 0;             
+                response.error = ErrorMessages.GetErrorMessage(response.error, new UnauthorizedAccessException());
                 response.data = null;
 
                 // Return unauthorized response

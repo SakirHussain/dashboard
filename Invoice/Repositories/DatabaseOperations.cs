@@ -51,8 +51,6 @@ namespace Invoice.Repositories
         {
             using (var _db = DbContextOptionsFactory.Create("EInvoice"))
             {
-                string cmd = "EXEC usp_get_einv_app_stdata @Id, @StateCode, @SupType, @PerdYear, @PerdMon,'','', @OutIn, @ForUpto";
-
                 if (requestModel.Id == 1)
                 {
                     List<ForIdOne> eInvoiceResponse = ReportFetch<ForIdOne>(requestModel);
