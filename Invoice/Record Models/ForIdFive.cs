@@ -5,7 +5,7 @@ namespace Invoice.Record_Models
     public class ForIdFive
     {
         [Key]
-        public string pan_no{ get; set; }
+        public string pan_no{ get; set; } = string.Empty;
         public string? trade_name { get; set; }
         public decimal assess_curval { get; set; }
         public decimal sgst_curval { get; set; }

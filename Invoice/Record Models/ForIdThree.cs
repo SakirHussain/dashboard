@@ -6,7 +6,7 @@ namespace Invoice.Record_Models
     {
         [Key]
         public int sector { get; set; }
-        public string sector_desc { get; set; }
+        public string sector_desc { get; set; } = string.Empty;
         public decimal assess_curval { get; set; }
         public decimal sgst_curval { get; set; }
         public decimal cgst_curval { get; set; }

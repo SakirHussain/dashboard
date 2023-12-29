@@ -1,55 +1,76 @@
-﻿using Invoice.Repositories;
-using Invoice.Interfaces;
+﻿using Invoice.Interfaces;
 using Invoice.Web_Models;
 using Invoice.WebModels;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
 namespace Invoice.Controllers
 {
+    /// <summary>
+    /// Controller for managing token-related API endpoints.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class TokenController : ControllerBase
     {
-        private readonly HeaderVerificationInterface _interHeaderVer;
         private readonly DatabaseOperationsInterface _interDbOp;
 
-        public TokenController(HeaderVerificationInterface interHeaderVer, DatabaseOperationsInterface interDbOp)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TokenController"/> class.
+        /// </summary>
+        /// <param name="interDbOp">Database operations interface.</param>
+        public TokenController(DatabaseOperationsInterface interDbOp)
         {
-            _interHeaderVer = interHeaderVer;
             _interDbOp = interDbOp;
-
         }
 
-        [HttpGet, HttpPost]
+        /// <summary>
+        /// Retrieves a new token based on validity.
+        /// </summary>
+        /// <param name="request">Serialized JSON string representing the token request.</param>
+        /// <returns>An <see cref="ApiResponseModel"/> containing the result of the operation.</returns>
+        [HttpPost, HttpGet]
         public ApiResponseModel GetToken(string request)
         {
             ApiResponseModel response = new ApiResponseModel();
-                        
-            TokenRequestModel requestModel = JsonSerializer.Deserialize<TokenRequestModel>(request)!;
 
-
-
-            if (_interDbOp.LoginDetailsVerify(requestModel!))
+            try
             {
-                AuthResponseModel authRes = _interDbOp.TokenCheck(requestModel!.LoginId);
-                response.status = 1;
-                response.error = null;
-                response.data = JsonSerializer.Serialize(authRes);
+                // Deserialize the JSON request into a TokenRequestModel
+                TokenRequestModel requestModel = JsonSerializer.Deserialize<TokenRequestModel>(request)!;
+
+                // Verify login details using DatabaseOperationsInterface
+                if (_interDbOp.LoginDetailsVerify(requestModel!))
+                {
+                    // Retrieve token details using DatabaseOperationsInterface
+                    AuthResponseModel authRes = _interDbOp.TokenCheck(requestModel!.LoginId);
+
+                    // Set response properties for successful operation
+                    response.status = 1;
+                    response.error = null;
+                    response.data = JsonSerializer.Serialize(authRes);
+                }
+                else
+                {
+                    // Set response properties for invalid login details
+                    response.status = 0;
+                    response.data = null;
+                    response.error.errorCode = 104;
+                    response.error.errorMessage = "Invalid Login Details";
+                    response.error.TimeStamp = DateTime.Now;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                response.status = 0; // error
+                // Set response properties for exception scenarios
+                response.status = 0;
                 response.data = null;
-                response.error.errorCode = 104;
-                response.error.errorMessage = "Invalid Login Details";
+                response.error.errorCode = 500; // Internal Server Error
+                response.error.errorMessage = "An error occurred while processing the request.";
                 response.error.TimeStamp = DateTime.Now;
             }
 
-
             return response;
-
         }
     }
 }

@@ -3,6 +3,6 @@
     public class AuthResponseModel
     {
         public Guid AuthToken { get; set; }
-        public string TokenTime { get; set; }
+        public string TokenTime { get; set; } = string.Empty;
     }
 }

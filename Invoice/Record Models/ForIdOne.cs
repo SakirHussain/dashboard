@@ -6,7 +6,7 @@ namespace Invoice.Record_Models
     {
         [Key]
         public int perd_year { get; set; }
-        public string mon { get; set; }
+        public string mon { get; set; } = string.Empty;
         public decimal assess_val { get; set; }
         public decimal sgst_value { get; set; }
         public decimal cgst_value { get; set; }
