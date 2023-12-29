@@ -86,13 +86,15 @@ The API accepts POST requests with the following model:
 
         Upon successful verification, a new token will be assigned with a validity of 1 hour.  
     <br>
+    
     - Get Report
     To request a report, send a POST request with the following details:
 
         - `Action`: "Get Report"
         - `Data`: Serialized JSON containing the required values for the report.
 
-##Response Model
+## Response Model
+
 The API response will follow the model:
 
 ```json
